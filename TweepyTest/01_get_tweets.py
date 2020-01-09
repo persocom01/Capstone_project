@@ -1,32 +1,31 @@
 import pandas as pd
 import tweepy
-from keys import *
-import tweepy_functions
+import keys as ky
+import tweepy_functions as tf
 import sys
 import io
-from pandas.io.json import json_normalize
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+auth = tweepy.OAuthHandler(ky.consumer_key, ky.consumer_secret)
+auth.set_access_token(ky.access_token, ky.access_token_secret)
 
 api = tweepy.API(auth)
 
 # u = api.get_user(783214)
 
 
-tweet_attribs = ['id_str', 'text']
-user_attribs = ['id_str', 'name', 'screen_name', 'description', 'friends_count']
+# tweet_attribs = ['id_str', 'text']
+# user_attribs = ['id_str', 'name', 'screen_name', 'description', 'friends_count']
 
 # Get tweet from hastag.
-max_tweets = 20
-tweets = tweepy.Cursor(api.search, q='the first temptation of christ', rpp=100).items(max_tweets)
+max_tweets = 1000
+search = tweepy.Cursor(api.search, q='the first temptation of christ', rpp=100).items(max_tweets)
 
-l = [jsonify_tweepy(tweet) for tweet in tweets]
-df = json_normalize(l)
-export_path = r'.\data\tweets.xlsx'
-df.to_excel(export_path)
+tweets = [tf.jsonify_tweepy(tweet) for tweet in search]
+df = pd.io.json.json_normalize(tweets)
+export_path = r'.\data\the_first_temptation_of_christ.csv'
+df.to_csv(export_path)
 
 # tweet_dict = {}
 # for tweet in tweets:
