@@ -1,14 +1,17 @@
 import pandas as pd
 import tweepy
-import keys as ky
 import tweepy_functions as tf
 import sys
 import io
+import json
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-auth = tweepy.OAuthHandler(ky.consumer_key, ky.consumer_secret)
-auth.set_access_token(ky.access_token, ky.access_token_secret)
+with open(r'.\twitter_scraping\keys.json') as f:
+    keys = json.load(f)
+
+auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
+auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 
 api = tweepy.API(auth)
 

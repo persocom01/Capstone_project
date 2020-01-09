@@ -11,7 +11,7 @@ from time import sleep
 # CHANGE THIS TO THE USER YOU WANT
 user = 'realdonaldtrump'
 
-with open('api_keys.json') as f:
+with open(r'.\twitter_scraping\keys.json') as f:
     keys = json.load(f)
 
 auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
@@ -55,14 +55,17 @@ zf.close()
 
 results = []
 
+
 def is_retweet(entry):
     return 'retweeted_status' in entry.keys()
+
 
 def get_source(entry):
     if '<' in entry["source"]:
         return entry["source"].split('>')[1].split('<')[0]
     else:
         return entry["source"]
+
 
 with open(output_file) as json_data:
     data = json.load(json_data)
@@ -85,9 +88,11 @@ with open(output_file_short, 'w') as outfile:
 
 with open(output_file_short) as master_file:
     data = json.load(master_file)
-    fields = ["favorite_count", "source", "text", "in_reply_to_screen_name", "is_retweet", "created_at", "retweet_count", "id_str"]
+    fields = ["favorite_count", "source", "text", "in_reply_to_screen_name",
+              "is_retweet", "created_at", "retweet_count", "id_str"]
     print('creating CSV version of minimized json master file')
     f = csv.writer(open('{}.csv'.format(user), 'w'))
     f.writerow(fields)
     for x in data:
-        f.writerow([x["favorite_count"], x["source"], x["text"], x["in_reply_to_screen_name"], x["is_retweet"], x["created_at"], x["retweet_count"], x["id_str"]])
+        f.writerow([x["favorite_count"], x["source"], x["text"], x["in_reply_to_screen_name"],
+                    x["is_retweet"], x["created_at"], x["retweet_count"], x["id_str"]])
