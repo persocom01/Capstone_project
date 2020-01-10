@@ -13,7 +13,7 @@ with open(r'.\twitter_scraping\keys.json') as f:
 auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
 auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 
-api = tweepy.API(auth)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # u = api.get_user(783214)
 
@@ -21,14 +21,17 @@ api = tweepy.API(auth)
 # tweet_attribs = ['id_str', 'text']
 # user_attribs = ['id_str', 'name', 'screen_name', 'description', 'friends_count']
 
+search_term = '#MichelleWilliams'
+search_term = search_term.lower()
+
 # Get tweet from hastag.
-max_tweets = 1000
-search = tweepy.Cursor(api.search, q='the first temptation of christ', rpp=100).items(max_tweets)
+# max_tweets = 2500
+search = tweepy.Cursor(api.search, q=search_term, rpp=100).items()
 
 tweets = [tf.jsonify_tweepy(tweet) for tweet in search]
 df = pd.io.json.json_normalize(tweets)
-export_path = r'.\data\the_first_temptation_of_christ.csv'
-df.to_csv(export_path)
+export_path = '.\\data\\' + search_term + '.csv'
+df.to_csv(export_path, index=None)
 
 # tweet_dict = {}
 # for tweet in tweets:
