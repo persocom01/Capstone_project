@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from time import sleep
 import json
@@ -39,8 +38,8 @@ def format_day(date):
 
 def form_url(mentioning, since, until):
     p1 = 'https://twitter.com/search?f=tweets&vertical=default&q='
-    p2 = 'in%20reply%20to%20' + mentioning + '%20since%3A' + \
-        since + '%20until%3A' + until + 'include%3Aretweets&src=typd'
+    p2 = '(%40' + mentioning + ')' + '%20since%3A' + since + \
+        '%20until%3A' + until + 'include%3Aretweets&src=typd'
     return p1 + p2
 
 
@@ -49,11 +48,11 @@ def increment_day(date, i):
 
 
 for day in range(1):
-    # d1 = format_day(increment_day(start, 0))
-    # d2 = format_day(increment_day(start, 1))
-    url = form_url(user)
-    # print(url)
-    # print(d1)
+    d1 = format_day(increment_day(start, 0))
+    d2 = format_day(increment_day(start, 1))
+    url = form_url(mentioning, d1, d2)
+    print(url)
+    print(d1)
     driver.get(url)
     sleep(delay)
 
@@ -66,10 +65,7 @@ for day in range(1):
             driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             sleep(delay)
             found_tweets = driver.find_elements_by_css_selector(tweet_selector)
-            if increment >= max_tweets:
-                break
-            else:
-                increment += 10
+            increment += 10
 
         print('{} tweets found, {} total'.format(len(found_tweets), len(ids)))
 
@@ -84,7 +80,7 @@ for day in range(1):
     except NoSuchElementException:
         print('no tweets on this day')
 
-    # start = increment_day(start, 1)
+    start = increment_day(start, 1)
 
 
 try:
