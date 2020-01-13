@@ -13,10 +13,9 @@ no_words = ''
 hastags = ''
 from_user = ''
 to_user = ''
-user = 'jk_rowling'
-max_tweets = 100
-start = datetime.datetime(2019, 12, 1)  # year, m, d
-end = datetime.datetime(2019, 12, 2)  # yyyy, m, d
+mentioning = 'jk_rowling'
+start = datetime.datetime(2019, 12, 19)  # year, m, d
+end = datetime.datetime(2019, 12, 31)  # yyyy, m, d
 
 # only edit these if you're having problems
 delay = 1  # time to wait on each page load before reading the page
@@ -24,11 +23,10 @@ driver = webdriver.Chrome()  # options are Chrome() Firefox() Safari()
 
 
 # don't mess with this stuff
-twitter_ids_filename = 'replies_to_' + user + '.json'
-# days = (end - start).days + 1
+twitter_ids_filename = 'advanced_search_tweet_ids.json'
+days = (end - start).days + 1
 id_selector = '.time a.tweet-timestamp'
 tweet_selector = 'li.js-stream-item'
-search = search.lower()
 ids = []
 
 
@@ -39,9 +37,10 @@ def format_day(date):
     return '-'.join([year, month, day])
 
 
-def form_url(user):
+def form_url(mentioning, since, until):
     p1 = 'https://twitter.com/search?f=tweets&vertical=default&q='
-    p2 = 'in%20reply%20to%20' + user
+    p2 = 'in%20reply%20to%20' + mentioning + '%20since%3A' + \
+        since + '%20until%3A' + until + 'include%3Aretweets&src=typd'
     return p1 + p2
 
 
