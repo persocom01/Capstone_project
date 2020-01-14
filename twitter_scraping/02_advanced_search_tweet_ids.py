@@ -14,23 +14,23 @@ hastags = ''
 from_user = ''
 to_user = ''
 mentioning = 'jk_rowling'
-start = datetime.datetime(2019, 12, 18)  # year, m, d
-end = datetime.datetime(2019, 12, 18)  # yyyy, m, d
+start = datetime.datetime(2019, 12, 19)  # year, m, d
+end = datetime.datetime(2019, 12, 19)  # yyyy, m, d
 
 # only edit these if you're having problems
 delay = 2  # time to wait on each page load before reading the page
 driver = webdriver.Chrome()  # options are Chrome() Firefox() Safari()
-# Remote webdiving.
+# Commented out remote webdiving option.
 # desiredCapabilities = DesiredCapabilities.CHROME.copy()
 # driver = webdriver.Remote(desired_capabilities=desiredCapabilities,
 #                           command_executor='http://127.0.0.1:4444/wd/hub')
 
-# don't mess with this stuff
+# Don't mess with this stuff.
 twitter_ids_filename = 'all_tweet_ids_'
 days = (end - start).days + 1
 id_selector = '.time a.tweet-timestamp'
 tweet_selector = 'li.js-stream-item'
-ids = set([])
+ids = []
 
 
 def format_day(date):
@@ -65,13 +65,11 @@ for day in range(days):
 
     try:
         found_tweets = driver.find_elements_by_css_selector(tweet_selector)
+        iteration = 1
         increment = 10
 
-        # if found_tweets > scroll_page_limit*10:
-        #     found_tweets = scroll_page_limit*10
-
-        while len(found_tweets) >= increment:
-            print(str(int(increment/10)) +
+        while len(found_tweets) >= iteration * increment:
+            print(str(iteration) +
                   '. scrolling down to load more tweets')
             driver.execute_script(
                 'window.scrollTo(0, document.body.scrollHeight);')
@@ -82,36 +80,37 @@ for day in range(days):
                 try:
                     id = tweet.find_element_by_css_selector(
                         id_selector).get_attribute('href').split('/')[-1]
-                    ids.add(id)
+                    ids.append(id)
                 except StaleElementReferenceException:
                     print('lost element reference', tweet)
 
-            print('{} tweets found, {} total'.format(
-                len(found_tweets), len(ids)))
+            # The data is saved into two files to prevent file corruption.
             filename = twitter_ids_filename + \
-                str(int((increment/10) % 2)) + '.json'
+                str(iteration % 2)) + '.json'
 
             try:
                 with open(filename) as f:
-                    all_ids = list(ids) + json.load(f)
-                    data_to_write = list(set(all_ids))
-                    print('tweets found on this iteration: ', len(ids))
+                    all_ids=ids + json.load(f)
+                    data_to_write=list(set(all_ids))
+                    print('{} tweets found, {} total'.format(
+                        len(found_tweets), len(ids)))
                     print('total tweet count: ', len(data_to_write))
             except FileNotFoundError:
                 with open(filename, 'w') as f:
-                    all_ids = ids
-                    data_to_write = list(set(all_ids))
-                    print('tweets found on this iteration: ', len(ids))
+                    all_ids=ids
+                    data_to_write=list(set(all_ids))
+                    print('{} tweets found, {} total'.format(
+                        len(found_tweets), len(ids)))
                     print('total tweet count: ', len(data_to_write))
 
             with open(filename, 'w') as outfile:
                 json.dump(data_to_write, outfile)
-            increment += 10
+            iteration += 1
 
     except NoSuchElementException:
         print('no tweets on this day')
 
-    start = increment_day(start, 1)
+    start=increment_day(start, 1)
 
 
 print('all done here')
