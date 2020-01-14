@@ -30,7 +30,7 @@ twitter_ids_filename = 'all_tweet_ids_'
 days = (end - start).days + 1
 id_selector = '.time a.tweet-timestamp'
 tweet_selector = 'li.js-stream-item'
-ids = []
+ids = set([])
 
 
 def format_day(date):
@@ -90,18 +90,16 @@ for day in range(days):
 
             try:
                 with open(filename) as f:
-                    all_ids = ids + json.load(f)
+                    all_ids = list(ids) + json.load(f)
                     data_to_write = list(set(all_ids))
-                    print('{} tweets found, {} total'.format(
-                        len(found_tweets), len(ids)))
-                    print('total tweet count: ', len(data_to_write))
+                    print(f'{len(ids)} tweets found')
+                    print('tweets in file: ', len(data_to_write))
             except FileNotFoundError:
                 with open(filename, 'w') as f:
                     all_ids = ids
                     data_to_write = list(set(all_ids))
-                    print('{} tweets found, {} total'.format(
-                        len(found_tweets), len(ids)))
-                    print('total tweet count: ', len(data_to_write))
+                    print(f'{len(ids)} tweets found')
+                    print('tweets in file: ', len(data_to_write))
 
             with open(filename, 'w') as outfile:
                 json.dump(data_to_write, outfile)
