@@ -80,7 +80,7 @@ for day in range(days):
                 try:
                     id = tweet.find_element_by_css_selector(
                         id_selector).get_attribute('href').split('/')[-1]
-                    ids.append(id)
+                    ids.add(id)
                 except StaleElementReferenceException:
                     print('lost element reference', tweet)
 
