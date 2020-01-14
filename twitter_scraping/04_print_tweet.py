@@ -2,12 +2,10 @@ import pandas as pd
 import sys
 import io
 import json
-import datetime
-import pytz
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-import_path = r'.\data\replies_to_jk.csv'
+import_path = r'.\data\#michellewilliams.csv'
 data = pd.read_csv(import_path, low_memory=False, index_col=0)
 print(data.shape)
 df = pd.DataFrame(data[(data['lang'] == 'en') | (data['lang'] == 'und')])
