@@ -86,19 +86,19 @@ for day in range(days):
 
             # The data is saved into two files to prevent file corruption.
             filename = twitter_ids_filename + \
-                str(iteration % 2)) + '.json'
+                str(iteration % 2) + '.json'
 
             try:
                 with open(filename) as f:
-                    all_ids=ids + json.load(f)
-                    data_to_write=list(set(all_ids))
+                    all_ids = ids + json.load(f)
+                    data_to_write = list(set(all_ids))
                     print('{} tweets found, {} total'.format(
                         len(found_tweets), len(ids)))
                     print('total tweet count: ', len(data_to_write))
             except FileNotFoundError:
                 with open(filename, 'w') as f:
-                    all_ids=ids
-                    data_to_write=list(set(all_ids))
+                    all_ids = ids
+                    data_to_write = list(set(all_ids))
                     print('{} tweets found, {} total'.format(
                         len(found_tweets), len(ids)))
                     print('total tweet count: ', len(data_to_write))
@@ -110,7 +110,7 @@ for day in range(days):
     except NoSuchElementException:
         print('no tweets on this day')
 
-    start=increment_day(start, 1)
+    start = increment_day(start, 1)
 
 
 print('all done here')
