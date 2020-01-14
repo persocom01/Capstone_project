@@ -1,6 +1,6 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+# from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
 import json
 import datetime
@@ -14,8 +14,8 @@ hastags = ''
 from_user = ''
 to_user = ''
 mentioning = 'jk_rowling'
-start = datetime.datetime(2019, 12, 19)  # year, m, d
-end = datetime.datetime(2019, 12, 19)  # yyyy, m, d
+start = datetime.datetime(2019, 12, 18)  # year, m, d
+end = datetime.datetime(2019, 12, 18)  # yyyy, m, d
 
 # only edit these if you're having problems
 delay = 2  # time to wait on each page load before reading the page
@@ -43,8 +43,10 @@ def format_day(date):
 
 def form_url(mentioning, since, until):
     p1 = 'https://twitter.com/search?f=tweets&vertical=default&q='
-    p2 = '(%40' + mentioning + ')' + '%20since%3A' + since + \
-        '%20until%3A' + until + 'include%3Aretweets&src=typd'
+    mentioning = '(%40' + mentioning + ')'
+    since = '%20since%3A' + since
+    until = '%20until%3A' + until
+    p2 = mentioning + since + until + 'include%3Aretweets&src=typd'
     return p1 + p2
 
 
@@ -69,7 +71,8 @@ for day in range(days):
         #     found_tweets = scroll_page_limit*10
 
         while len(found_tweets) >= increment:
-            print(str(int(increment/10)) + '. scrolling down to load more tweets')
+            print(str(int(increment/10)) +
+                  '. scrolling down to load more tweets')
             driver.execute_script(
                 'window.scrollTo(0, document.body.scrollHeight);')
             sleep(delay)
@@ -83,8 +86,10 @@ for day in range(days):
                 except StaleElementReferenceException:
                     print('lost element reference', tweet)
 
-            print('{} tweets found, {} total'.format(len(found_tweets), len(ids)))
-            filename = twitter_ids_filename + str(int((increment/10) % 2)) + '.json'
+            print('{} tweets found, {} total'.format(
+                len(found_tweets), len(ids)))
+            filename = twitter_ids_filename + \
+                str(int((increment/10) % 2)) + '.json'
 
             try:
                 with open(filename) as f:
@@ -110,4 +115,4 @@ for day in range(days):
 
 
 print('all done here')
-# driver.close()
+driver.close()
