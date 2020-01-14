@@ -14,7 +14,8 @@ from_user = ''
 to_user = ''
 mentioning = 'jk_rowling'
 start = datetime.datetime(2019, 12, 19)  # year, m, d
-end = datetime.datetime(2019, 12, 31)  # yyyy, m, d
+end = datetime.datetime(2019, 12, 19)  # yyyy, m, d
+scroll_page_limit = 1000
 
 # only edit these if you're having problems
 delay = 1  # time to wait on each page load before reading the page
@@ -31,7 +32,8 @@ ids = []
 
 def format_day(date):
     day = '0' + str(date.day) if len(str(date.day)) == 1 else str(date.day)
-    month = '0' + str(date.month) if len(str(date.month)) == 1 else str(date.month)
+    month = '0' + str(date.month) if len(str(date.month)
+                                         ) == 1 else str(date.month)
     year = str(date.year)
     return '-'.join([year, month, day])
 
@@ -47,7 +49,7 @@ def increment_day(date, i):
     return date + datetime.timedelta(days=i)
 
 
-for day in range(1):
+for day in range(days):
     d1 = format_day(increment_day(start, 0))
     d2 = format_day(increment_day(start, 1))
     url = form_url(mentioning, d1, d2)
@@ -60,9 +62,13 @@ for day in range(1):
         found_tweets = driver.find_elements_by_css_selector(tweet_selector)
         increment = 10
 
+        if found_tweets > scroll_page_limit*10:
+            found_tweets = scroll_page_limit*10
+
         while len(found_tweets) >= increment:
             print('scrolling down to load more tweets')
-            driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+            driver.execute_script(
+                'window.scrollTo(0, document.body.scrollHeight);')
             sleep(delay)
             found_tweets = driver.find_elements_by_css_selector(tweet_selector)
             increment += 10
