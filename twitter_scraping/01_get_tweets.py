@@ -18,15 +18,16 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # u = api.get_user(783214)
 
-search_term = '#michellewilliams'
+search_term = '@dumbbitchmargo'
 search_term = search_term.lower()
 project_folder = 'data'
+max_tweets = 5000
 
 # Get tweet twitter search. Twitter api tweet limit should be 2500 per 15 min.
 # API.search(q[, geocode][, lang][, locale][, result_type][, count][, until]
 # [, since_id][, max_id][, include_entities])
 tweepy_object = tweepy.Cursor(api.search, q=search_term, rpp=100,
-                              tweet_mode='extended', since_id=1215469145325756416).items()
+                              tweet_mode='extended').items(max_tweets)
 
 tweets = [tf.jsonify_tweepy(tweet) for tweet in tweepy_object]
 df = pd.io.json.json_normalize(tweets)  # Flattens the json file.
