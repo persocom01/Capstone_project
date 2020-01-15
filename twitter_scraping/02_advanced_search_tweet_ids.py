@@ -15,7 +15,7 @@ hastags = ''
 from_user = ''
 to_user = ''
 mentioning = 'jk_rowling'
-start = datetime.datetime(2019, 12, 19)  # year, m, d
+start = datetime.datetime(2019, 12, 19)  # yyyy, m, d
 end = datetime.datetime(2019, 12, 19)  # yyyy, m, d
 
 # only edit these if you're having problems
