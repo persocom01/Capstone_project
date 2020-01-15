@@ -4,6 +4,7 @@ from selenium.common.exceptions import NoSuchElementException, StaleElementRefer
 from time import sleep
 import json
 import datetime
+import os
 
 # Search variables.
 all_words = ''
@@ -26,7 +27,7 @@ driver = webdriver.Chrome()  # options are Chrome() Firefox() Safari()
 #                           command_executor='http://127.0.0.1:4444/wd/hub')
 
 # Don't mess with this stuff.
-twitter_ids_filename = 'all_tweet_ids_'
+twitter_ids_filename = 'all_tweet_ids'
 days = (end - start).days + 1
 id_selector = '.time a.tweet-timestamp'
 tweet_selector = 'li.js-stream-item'
@@ -84,7 +85,8 @@ for day in range(days):
                 except StaleElementReferenceException:
                     print('lost element reference', tweet)
 
-            # The data is saved into two files to prevent file corruption.
+            # The data is saved into two files to prevent file corruption when
+            # program is terminated early.
             filename = twitter_ids_filename + \
                 str(iteration % 2) + '.json'
 
@@ -92,13 +94,13 @@ for day in range(days):
                 with open(filename) as f:
                     all_ids = list(ids) + json.load(f)
                     data_to_write = list(set(all_ids))
-                    print(f'{len(ids)} tweets found')
+                    print('tweets found:', len(ids))
                     print('tweets in file: ', len(data_to_write))
             except FileNotFoundError:
                 with open(filename, 'w') as f:
                     all_ids = ids
                     data_to_write = list(set(all_ids))
-                    print(f'{len(ids)} tweets found')
+                    print('tweets found:', len(ids))
                     print('tweets in file: ', len(data_to_write))
 
             with open(filename, 'w') as outfile:
@@ -110,6 +112,22 @@ for day in range(days):
 
     start = increment_day(start, 1)
 
+# Write final output.
+with open(twitter_ids_filename + '0.json') as f:
+    data0 = json.load(f)
+    count0 = len(data0)
+with open(twitter_ids_filename + '1.json') as f:
+    data1 = json.load(f)
+    count1 = len(data0)
+with open(twitter_ids_filename + '.json', 'w') as finaloutput:
+    if count0 > count1:
+        json.dump(data0, finaloutput)
+    else:
+        json.dump(data1, finaloutput)
+
+# Cleanup.
+os.remove(twitter_ids_filename + '0.json')
+os.remove(twitter_ids_filename + '1.json')
 
 print('all done here')
 driver.close()
