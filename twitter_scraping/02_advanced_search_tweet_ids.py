@@ -5,6 +5,7 @@ from time import sleep
 import json
 import datetime
 import os
+import pickle
 
 # Search variables.
 all_words = ''
@@ -62,6 +63,10 @@ for day in range(days):
     print(url)
     print(d1)
     driver.get(url)
+    # Continue session.
+    # cookies = pickle.load(open('cookies.pkl', 'rb'))
+    # for cookie in cookies:
+    #     driver.add_cookie(cookie)
     sleep(delay)
 
     try:
@@ -105,6 +110,10 @@ for day in range(days):
 
             with open(filename, 'w') as outfile:
                 json.dump(data_to_write, outfile)
+
+            # Saves surrent session.
+            pickle.dump(driver.get_cookies(), open('cookies.pkl', 'wb'))
+
             iteration += 1
 
     except NoSuchElementException:
