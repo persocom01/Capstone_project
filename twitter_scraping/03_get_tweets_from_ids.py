@@ -14,21 +14,25 @@ with open(r'.\twitter_scraping\keys.json') as f:
 auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
 auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 # wait_on_rate_limit=True avoids error 429 for hitting twitter api limits.
-api = tweepy.API(auth, wait_on_rate_limit=True, tweet_mode='extended')
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
-with open(r'replies_to_jk_rowling.json') as f:
+with open(r'all_tweet_ids.json') as f:
     ids = json.load(f)
 
 stats = []
 for id in ids:
-    status = api.get_status(id)
-    stat = tf.jsonify_tweepy(status)
-    stats.append(stat)
-    # retweeted_status_author = status.retweeted_status.author
-    # quoted_status_author = status.quoted_status.author
+    try:
+        status = api.get_status(id, tweet_mode='extended')
+        stat = tf.jsonify_tweepy(status)
+        stats.append(stat)
+    except tweepy.error.TweepError:
+        continue
 
 with open(r'.\data\replies_to_jk_rowling.json', 'w') as outfile:
     json.dump(stats, outfile)
+
+# retweeted_status_author = status.retweeted_status.author
+# quoted_status_author = status.quoted_status.author
 
 
 # df = pd.io.json.json_normalize(stats)

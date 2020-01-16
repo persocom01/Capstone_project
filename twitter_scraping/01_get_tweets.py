@@ -14,7 +14,7 @@ with open(r'.\twitter_scraping\keys.json') as f:
 auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
 auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 # wait_on_rate_limit=True avoids error 429 for hitting twitter api limits.
-api = tweepy.API(auth, wait_on_rate_limit=True, tweet_mode='extended')
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
 # u = api.get_user(783214)
 
@@ -26,7 +26,8 @@ max_tweets = 5000
 # Get tweet twitter search. Twitter api tweet limit should be 2500 per 15 min.
 # API.search(q[, geocode][, lang][, locale][, result_type][, count][, until]
 # [, since_id][, max_id][, include_entities])
-tweepy_object = tweepy.Cursor(api.search, q=search_term, rpp=100).items(max_tweets)
+tweepy_object = tweepy.Cursor(api.search, q=search_term, rpp=100,
+                              tweet_mode='extended').items(max_tweets)
 
 tweets = [tf.jsonify_tweepy(tweet) for tweet in tweepy_object]
 df = pd.io.json.json_normalize(tweets)  # Flattens the json file.
