@@ -7,11 +7,14 @@ import json
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
+# Connect to twitter api.
 with open(r'.\twitter_scraping\keys.json') as f:
     keys = json.load(f)
+
 auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
 auth.set_access_token(keys['access_token'], keys['access_token_secret'])
-api = tweepy.API(auth)
+# wait_on_rate_limit=True avoids error 429 for hitting twitter api limits.
+api = tweepy.API(auth, wait_on_rate_limit=True, tweet_mode='extended')
 
 with open(r'replies_to_jk_rowling.json') as f:
     ids = json.load(f)

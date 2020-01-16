@@ -5,11 +5,11 @@ import json
 # sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 # sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-import_path = r'.\data\#michellewilliams_classify3.csv'
+import_path = r'.\data\#michellewilliams.csv'
 data = pd.read_csv(import_path, low_memory=False)
 print(data.shape)
 print(data.columns)
-print(data['retweeted_status.id_str'][223])
+print(data['user.id_str'][223])
 # data = data.rename(columns={'text': 'full_text'})
 # df = pd.DataFrame(data[(data['lang'] == 'en') | (data['lang'] == 'und')])
 # print(df.shape)
