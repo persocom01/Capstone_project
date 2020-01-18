@@ -28,7 +28,7 @@ for id in ids:
     except tweepy.error.TweepError:
         continue
 
-with open(r'.\data\replies_to_jk_rowling.json', 'w') as outfile:
+with open(r'.\data\#cancelnetflix.json', 'w') as outfile:
     json.dump(stats, outfile)
 
 # retweeted_status_author = status.retweeted_status.author

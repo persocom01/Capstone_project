@@ -12,12 +12,14 @@ all_words = ''
 phrase = ''
 any_words = ''
 no_words = ''
-hastags = ''
+hastags = 'cancelnetflix'
+language = 'en'
 from_user = ''
 to_user = ''
-mentioning = 'jk_rowling'
-start = datetime.datetime(2019, 12, 19)  # yyyy, m, d
-end = datetime.datetime(2019, 12, 19)  # yyyy, m, d
+mentioning = ''
+start = datetime.datetime(2019, 12, 11)  # yyyy, m, d
+end = datetime.datetime(2019, 12, 31)  # yyyy, m, d
+retweets = True
 
 # only edit these if you're having problems
 delay = 2  # time to wait on each page load before reading the page
@@ -43,12 +45,21 @@ def format_day(date):
     return '-'.join([year, month, day])
 
 
-def form_url(mentioning, since, until):
+def form_url(hastags='', language='', mentioning='', since='', until='', retweets=False):
     p1 = 'https://twitter.com/search?f=tweets&vertical=default&q='
-    mentioning = '(%40' + mentioning + ')'
+    if hastags != '':
+        hastags = '(%23' + hastags + ')'
+    if language != '':
+        language = '%20lang%3A' + language
+    if mentioning != '':
+        mentioning = '(%40' + mentioning + ')'
+    if retweets:
+        retweets = 'include%3Aretweets'
+    else:
+        retweets = ''
     since = '%20since%3A' + since
     until = '%20until%3A' + until
-    p2 = mentioning + since + until + 'include%3Aretweets&src=typd'
+    p2 = hastags + mentioning + since + until + retweets + '&src=typd'
     return p1 + p2
 
 
@@ -59,14 +70,14 @@ def increment_day(date, i):
 for day in range(days):
     d1 = format_day(increment_day(start, 0))
     d2 = format_day(increment_day(start, 1))
-    url = form_url(mentioning, d1, d2)
+    url = form_url(hastags, language, mentioning, d1, d2, retweets)
     print(url)
     print(d1)
     driver.get(url)
     # Continue session.
-    # cookies = pickle.load(open('cookies.pkl', 'rb'))
-    # for cookie in cookies:
-    #     driver.add_cookie(cookie)
+    cookies = pickle.load(open('cookies.pkl', 'rb'))
+    for cookie in cookies:
+        driver.add_cookie(cookie)
     sleep(delay)
 
     try:
