@@ -21,15 +21,23 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 search_term = '@dumbbitchmargo'
 search_term = search_term.lower()
 project_folder = 'data'
-max_tweets = 5000
+max_tweets = 18000
 
 # Get tweet twitter search. Twitter api tweet limit should be 2500 per 15 min.
 # API.search(q[, geocode][, lang][, locale][, result_type][, count][, until]
 # [, since_id][, max_id][, include_entities])
 tweepy_object = tweepy.Cursor(api.search, q=search_term, rpp=100,
-                              tweet_mode='extended').items(max_tweets)
+                              tweet_mode='extended', lang='en').items(max_tweets)
 
+# Convert to json.
 tweets = [tf.jsonify_tweepy(tweet) for tweet in tweepy_object]
+
+# Create raw json file.
+export_path = '.\\' + project_folder + '\\' + search_term + '.json'
+with open(export_path, 'w') as f:
+    json.dump(tweets, f)
+
+# Create excel readable csv file.
 df = pd.io.json.json_normalize(tweets)  # Flattens the json file.
 export_path = '.\\' + project_folder + '\\' + search_term + '.csv'
 df.to_csv(export_path, index=None)
