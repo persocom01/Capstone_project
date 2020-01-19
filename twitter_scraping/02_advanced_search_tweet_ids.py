@@ -23,8 +23,11 @@ retweets = True
 
 # only edit these if you're having problems
 delay = 2  # time to wait on each page load before reading the page
-driver = webdriver.Chrome()  # options are Chrome() Firefox() Safari()
-# Commented out remote webdiving option.
+chrome_options = webdriver.chrome.options.Options()
+chrome_options.add_argument('--user-data-dir=chrome-data')
+# options are Chrome() Firefox() Safari()
+driver = webdriver.Chrome(options=chrome_options)
+# Remote webdiving option.
 # desiredCapabilities = DesiredCapabilities.CHROME.copy()
 # driver = webdriver.Remote(desired_capabilities=desiredCapabilities,
 #                           command_executor='http://127.0.0.1:4444/wd/hub')
@@ -75,9 +78,9 @@ for day in range(days):
     print(d1)
     driver.get(url)
     # Continue session.
-    cookies = pickle.load(open('cookies.pkl', 'rb'))
-    for cookie in cookies:
-        driver.add_cookie(cookie)
+    # cookies = pickle.load(open('cookies.pkl', 'rb'))
+    # for cookie in cookies:
+    #     driver.add_cookie(cookie)
     sleep(delay)
 
     try:
@@ -123,7 +126,7 @@ for day in range(days):
                 json.dump(data_to_write, outfile)
 
             # Saves surrent session.
-            pickle.dump(driver.get_cookies(), open('cookies.pkl', 'wb'))
+            # pickle.dump(driver.get_cookies(), open('cookies.pkl', 'wb'))
 
             iteration += 1
 

@@ -1,11 +1,17 @@
 import pandas as pd
 import tweepy
 import tweepy_functions as tf
+import json
+import zipfile
 import sys
 import io
-import json
+
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
+
+# Change to change save folder and filename.
+save_folder = 'data'
+filename = ''
 
 # Connect to twitter api.
 with open(r'.\twitter_scraping\keys.json') as f:
@@ -15,34 +21,33 @@ auth = tweepy.OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
 auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 # wait_on_rate_limit=True avoids error 429 for hitting twitter api limits.
 api = tweepy.API(auth, wait_on_rate_limit=True)
+compression = zipfile.ZIP_DEFLATED
 
 with open(r'all_tweet_ids.json') as f:
     ids = json.load(f)
 
-stats = []
+print('total ids:', len(ids))
+
+all_data = []
 for id in ids:
     try:
-        status = api.get_status(id, tweet_mode='extended')
-        stat = tf.jsonify_tweepy(status)
-        stats.append(stat)
+        data = api.get_status(id, tweet_mode='extended')
+        data_json = tf.jsonify_tweepy(data)
+        all_data.append(data)
+    # Continue if a banned id is encountered.
     except tweepy.error.TweepError:
         continue
 
-with open(r'.\data\#cancelnetflix.json', 'w') as outfile:
-    json.dump(stats, outfile)
+# Create zipped master json file.
+print('creating zipped master json file.')
+export_path = f'.\\{save_folder}\\{filename}.csv'
+zf = zipfile.ZipFile(export_path, mode='w')
+output_file = f'{filename}.json'
+zf.write(output_file, compress_type=compression)
+zf.close()
 
-# retweeted_status_author = status.retweeted_status.author
-# quoted_status_author = status.quoted_status.author
-
-
-# df = pd.io.json.json_normalize(stats)
-#
-#
-# export_path = r'.\data\replies_to_jk.csv'
-# df.to_csv(export_path)
-
-# print(zip(authors, ids))
-# print({k: v for k, v in zip(authors, ids)})
-#
-# with open(r'replies.json', 'w') as outfile:
-#     json.dump({k: v for k, v in zip(authors, ids)}, outfile)
+# Create excel readable csv file.
+print('creating flattened csv file.')
+df = pd.io.json.json_normalize(all_data)  # Flattens the json file.
+export_path = f'.\\{save_folder}\\{filename}.csv'
+df.to_csv(export_path, index=None)
