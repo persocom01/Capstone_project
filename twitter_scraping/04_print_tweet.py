@@ -2,14 +2,28 @@ import pandas as pd
 import sys
 import io
 import json
-# sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
-# sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-import_path = r'.\data\#michellewilliams.csv'
-data = pd.read_csv(import_path, low_memory=False)
-print(data.shape)
-print(data.columns)
-print(data['user.id_str'][223])
+save_folder = 'data'
+filename = '#cancelnetflix'
+
+# import_path = r'.\data\#michellewilliams.csv'
+# data = pd.read_csv(import_path, low_memory=False)
+# print(data.shape)
+# print(data.columns)
+# print(data['user.id_str'][223])
+
+import_path = r'.\data\#cancelnetflix.json'
+with open(import_path, 'r') as f:
+    dic = json.load(f)
+print(len(dic))
+
+df = pd.io.json.json_normalize(dic)  # Flattens the json file.
+export_path = f'.\\{save_folder}\\{filename}.csv'
+df.to_csv(export_path, index=None)
+
+
 # data = data.rename(columns={'text': 'full_text'})
 # df = pd.DataFrame(data[(data['lang'] == 'en') | (data['lang'] == 'und')])
 # print(df.shape)
