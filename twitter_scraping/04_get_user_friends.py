@@ -12,7 +12,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 # Change to change save folder and filename.
 folder_path = r'.\data'
 in_file = '#michellewilliams_users'
-start = 329
+start = 476
 batch_size = 20
 
 # Connect to twitter api.
