@@ -35,7 +35,9 @@ for id in ids:
         data_json = tf.jsonify_tweepy(data)
         all_data.append(data_json)
     # Continue if a banned id is encountered.
-    except tweepy.error.TweepError:
+    except tweepy.error.TweepError as err:
+        print(f'TweepError encountered: {err}')
+        print('continuing...')
         continue
 
 # Create zipped master json file.
