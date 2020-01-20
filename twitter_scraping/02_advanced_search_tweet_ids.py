@@ -105,7 +105,7 @@ for day in range(days):
                     print('lost element reference', tweet)
 
             # The data is saved into two files to prevent file corruption when
-            # program is terminated early.
+            # the program is terminated early.
             filename = twitter_ids_filename + \
                 str(iteration % 2) + '.json'
 
@@ -152,5 +152,5 @@ with open(twitter_ids_filename + '.json', 'w') as finaloutput:
 os.remove(twitter_ids_filename + '0.json')
 os.remove(twitter_ids_filename + '1.json')
 
-print('all done here')
+print('all done.')
 driver.close()
