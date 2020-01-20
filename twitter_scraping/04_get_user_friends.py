@@ -10,8 +10,8 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 # Change to change save folder and filename.
 folder_path = r'.\data'
 in_file = '#michellewilliams_users'
-start = 46
-end = 47
+start = 47
+end = 50
 
 # Connect to twitter api.
 with open(r'.\twitter_scraping\keys.json') as f:
