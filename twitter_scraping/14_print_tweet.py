@@ -5,14 +5,15 @@ import json
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
-save_folder = 'data'
-filename = '#cancelnetflix'
+# save_folder = 'data'
+# filename = '#cancelnetflix'
 
 import_path = r'.\data\#michellewilliams_users.csv'
 data = pd.read_csv(import_path, low_memory=False)
 # print(data.shape)
 # print(data.columns)
-print(data.iloc[20])
+# print(data.iloc[20])
+print(data['user.description'][1])
 
 # import_path = r'.\data\#cancelnetflix.json'
 # with open(import_path, 'r') as f:

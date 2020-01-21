@@ -6,6 +6,7 @@
 class Nabe:
 
     def __init__(self):
+        self.null_dict = None
         self.steps = '''
         1. df.head()
         2. df.info()
@@ -30,6 +31,13 @@ class Nabe:
         df = df.iloc[:, non_null_cols]
         return df
 
+    # Returns the row index of a column value.
+    def get_index(self, df, col_name, value):
+        if len(df.loc[df[col_name] == value]) == 1:
+            return df.loc[df[col_name] == value].index[0]
+        else:
+            return df.loc[df[col_name] == value].index
+
 # CZ deals with word processing.
 # She pastes 1 yen stickers on things she likes.
 
@@ -47,11 +55,14 @@ class CZ:
             "'re": " are"
         }
 
+    # Lowercase.
+    def to_lower(self, sentence):
+        return sentence.lower()
+
     # To tokenize is to split the sentence into words.
-    def re_tokenize(self, sentence):
+    def re_tokenize(self, sentence, sep=r'\w+'):
         from nltk.tokenize import RegexpTokenizer
-        retoken = RegexpTokenizer(r'\w+')
-        sentence = sentence.lower()
+        retoken = RegexpTokenizer(sep)
         words = retoken.tokenize(sentence)
         return words
 
@@ -81,7 +92,16 @@ class CZ:
         import re
         if inplace is False:
             text_list = text_list.copy()
-        for i in range(len(text_list)):
+
+        # Prevents KeyError from passing a pandas series with index not
+        # beginning in 0.
+        try:
+            iter(text_list.index)
+            r = text_list.index
+        except TypeError:
+            r = range(len(text_list))
+
+        for i in r:
             for arg in args:
                 # Maps text with a function.
                 if callable(arg):
