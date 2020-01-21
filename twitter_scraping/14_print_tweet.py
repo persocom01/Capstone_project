@@ -8,20 +8,20 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 save_folder = 'data'
 filename = '#cancelnetflix'
 
-# import_path = r'.\data\#michellewilliams.csv'
-# data = pd.read_csv(import_path, low_memory=False)
+import_path = r'.\data\#michellewilliams_users.csv'
+data = pd.read_csv(import_path, low_memory=False)
 # print(data.shape)
 # print(data.columns)
-# print(data['user.id_str'][223])
+print(data.iloc[20])
 
-import_path = r'.\data\#cancelnetflix.json'
-with open(import_path, 'r') as f:
-    dic = json.load(f)
-print(len(dic))
-
-df = pd.io.json.json_normalize(dic)  # Flattens the json file.
-export_path = f'.\\{save_folder}\\{filename}.csv'
-df.to_csv(export_path, index=None)
+# import_path = r'.\data\#cancelnetflix.json'
+# with open(import_path, 'r') as f:
+#     dic = json.load(f)
+# print(len(dic))
+#
+# df = pd.io.json.json_normalize(dic)  # Flattens the json file.
+# export_path = f'.\\{save_folder}\\{filename}.csv'
+# df.to_csv(export_path, index=None)
 
 
 # data = data.rename(columns={'text': 'full_text'})
