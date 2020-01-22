@@ -15,11 +15,22 @@ class Nabe:
         5. visualize correlations
         '''
 
-    def get_nulls(self, df):
+    def get_null_indexes(self, df, cols=None):
+        '''
+        Takes a DataFrame and returns a dictionary of columns and the row
+        indexes of the null values in them.
+        '''
+        # Prevents errors from passing a string instead of a list.
+        if isinstance(cols, str):
+            cols = [cols]
+
+        null_indexes = []
         null_dict = {}
-        for k, v in df.isnull().sum().iteritems():
-            if v > 0:
-                null_dict[k] = v
+        if cols is None:
+            cols = df.columns
+        for col in cols:
+            null_indexes = df[df[col].isnull()].index.tolist()
+            null_dict[col] = null_indexes
         return null_dict
 
     # Drops columns with 75% or more null values.
