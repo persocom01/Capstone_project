@@ -40,12 +40,15 @@ for id in ids:
         print('continuing...')
         continue
 
-# Create zipped master json file.
+# Create json file.
+export_path = f'{folder_path}\\{out_file}.json'
+with open(export_path, 'w') as f:
+    json.dump(all_data, f)
+# Create zip file.
 print('creating zipped master json file.')
-export_path = f'{folder_path}\\{out_file}.csv'
-zf = zipfile.ZipFile(export_path, mode='w')
-output_file = f'{out_file}.json'
-zf.write(output_file, compress_type=compression)
+zip_export_path = f'{folder_path}\\{out_file}.zip'
+zf = zipfile.ZipFile(zip_export_path, mode='w')
+zf.write(export_path, compress_type=compression)
 zf.close()
 
 # Create excel readable csv file.
