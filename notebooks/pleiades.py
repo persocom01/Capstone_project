@@ -65,10 +65,11 @@ class CZ:
             "'ve": " have",
             "'re": " are"
         }
-        self.re_gender_pronouns = ['[hH]e/[hH]im', '[tT]hey/[tT]hem', '[tT]ey/[tT]em', '[eE]y/[eE]m', '[eE]/[eE]m', '[tT]hon/[tT]hon', '[fF]ae/[fF]aer', '[vV]ae/[vV]aer', '[aA]e/[aA]er', '[nN]e/[nN]ym', '[nN]e/[nN]em', '[xX]e/[xX]em', '[xX]e/[xX]im', '[xX]ie/[xX]em', '[zZ]e/[zZ]ir',
-                                   '[zZ]ie/[zZ]ir', '[zZ]he/[zZ]hir', '[zZ]e/[hH]ir', '[sS]ie/[sS]ier', '[zZ]ed/[zZ]ed', '[zZ]ed/[zZ]ed', '[cC]e/[cC]ir', '[cC]o/[cC]os', '[vV]e/[vV]is', '[jJ]ee/[jJ]em', '[lL]ee/[lL]im', '[kK]ye/[kK]yr', '[pP]er/[pP]er', '[hH]u/[hH]um', '[bB]un/[bB]un', '[iI]t/[iI]t']
-        self.re_email = r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)'
-        self.re_links = r'(https?://[^ ]+)'
+        self.re_ref = {
+            'email': r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)',
+            'links': r'(https?://[^ ]+)',
+            'gender_pronouns': ['[hH]e/[hH]im', '[tT]hey/[tT]hem', '[tT]ey/[tT]em', '[eE]y/[eE]m', '[eE]/[eE]m', '[tT]hon/[tT]hon', '[fF]ae/[fF]aer', '[vV]ae/[vV]aer', '[aA]e/[aA]er', '[nN]e/[nN]ym', '[nN]e/[nN]em', '[xX]e/[xX]em', '[xX]e/[xX]im', '[xX]ie/[xX]em', '[zZ]e/[zZ]ir', '[zZ]ie/[zZ]ir', '[zZ]he/[zZ]hir', '[zZ]e/[hH]ir', '[sS]ie/[sS]ier', '[zZ]ed/[zZ]ed', '[zZ]ed/[zZ]ed', '[cC]e/[cC]ir', '[cC]o/[cC]os', '[vV]e/[vV]is', '[jJ]ee/[jJ]em', '[lL]ee/[lL]im', '[kK]ye/[kK]yr', '[pP]er/[pP]er', '[hH]u/[hH]um', '[bB]un/[bB]un', '[iI]t/[iI]t']
+        }
 
     # Lowercase.
     def to_lower(self, sentence):
@@ -100,7 +101,17 @@ class CZ:
         # Returns sentence instead of individual words.
         return ' '.join(words)
 
-    def text_list_cleaner(self, text_list, *args, replace=' ', inplace=False):
+    def remove_punctuation(self, sentence, sep=' '):
+        import string
+        translator = str.maketrans(string.punctuation, 'sep'*len(string.punctuation))
+        return sentence.translate(translator)
+
+    def split_camel_case(self, sentence):
+        import re
+        splitted = re.sub('([A-Z][a-z]+)', r' \1', re.sub('([A-Z]+)', r' \1', sentence)).split()
+        return ' '.join(splitted)
+
+    def text_list_cleaner(self, text_list, *args, sep=' ', inplace=False):
         '''
         Cleans text in lists.
         '''
@@ -130,10 +141,10 @@ class CZ:
                 elif not isinstance(arg, str):
                     for a in arg:
                         pattern = f' {a} '
-                        text_list[i] = re.sub(pattern, replace, text_list[i])
+                        text_list[i] = re.sub(pattern, sep, text_list[i])
                 # For any other special cases.
                 else:
-                    text_list[i] = re.sub(arg, replace, text_list[i])
+                    text_list[i] = re.sub(arg, sep, text_list[i])
         return text_list
 
     def word_cloud(self, text, figsize=(12.5, 7.5), max_font_size=None, max_words=200, background_color='black', mask=None, recolor=False, **kwargs):
