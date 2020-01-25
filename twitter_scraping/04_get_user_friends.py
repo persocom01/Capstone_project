@@ -3,7 +3,7 @@ import tweepy
 import pandas as pd
 import math
 import zipfile
-import shutil
+import os
 import sys
 import io
 
@@ -89,5 +89,7 @@ for i in range(batches):
             print('users in main file: ', len(users_friends))
     with open(main_path, 'w') as outfile:
         json.dump(users_friends, outfile)
+    # Del batch file.
+    os.remove(batch_path)
 
 print('all done.')
