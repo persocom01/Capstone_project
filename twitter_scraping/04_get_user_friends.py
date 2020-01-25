@@ -2,7 +2,6 @@ import json
 import tweepy
 import pandas as pd
 import math
-import zipfile
 import os
 import sys
 import io
@@ -15,7 +14,6 @@ folder_path = r'.\data'
 in_file = '#michellewilliams_users'
 start = 476
 batch_size = 20
-compression = zipfile.ZIP_DEFLATED
 
 # Connect to twitter api.
 with open(r'.\twitter_scraping\keys.json') as f:
