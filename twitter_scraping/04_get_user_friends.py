@@ -30,7 +30,7 @@ data = pd.read_csv(import_path)
 batches = math.ceil((data.shape[0] - start) / batch_size)
 batch_file = in_file + '_friends.batch'
 batch_path = f'{folder_path}\\{batch_file}'
-main_file = in_file + '_friends.zip'
+main_file = in_file + '_friends.json'
 main_path = f'{folder_path}\\{main_file}'
 
 for i in range(batches):
