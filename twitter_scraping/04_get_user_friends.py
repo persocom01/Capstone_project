@@ -2,6 +2,7 @@ import json
 import tweepy
 import pandas as pd
 import math
+import zipfile
 import shutil
 import sys
 import io
@@ -14,6 +15,7 @@ folder_path = r'.\data'
 in_file = '#michellewilliams_users'
 start = 476
 batch_size = 20
+compression = zipfile.ZIP_DEFLATED
 
 # Connect to twitter api.
 with open(r'.\twitter_scraping\keys.json') as f:
@@ -26,9 +28,12 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 import_path = folder_path + '\\' + in_file + '.csv'
 data = pd.read_csv(import_path)
-
 # Divide users into batches.
 batches = math.ceil((data.shape[0] - start) / batch_size)
+batch_file = in_file + '_friends.batch'
+batch_path = f'{folder_path}\\{batch_file}'
+main_file = in_file + '_friends.zip'
+main_path = f'{folder_path}\\{main_file}'
 
 for i in range(batches):
 
@@ -36,11 +41,11 @@ for i in range(batches):
     if i == batches - 1:
         user_ids = data['user.id_str'][start:]
         print(
-            f'scraping {start} to {data.shape[0]} out of {data.shape[0]} ids.')
+            f'scraping id index {start} to {data.shape[0]} of {data.shape[0]-1}.')
     else:
         user_ids = data['user.id_str'][start:(start + batch_size)]
         print(
-            f'scraping {start} to {(start + batch_size)} out of {data.shape[0]} ids.')
+            f'scraping id index {start} to {(start + batch_size)} of {data.shape[0]-1}.')
         start += batch_size
 
     users_friends = {}
@@ -54,18 +59,16 @@ for i in range(batches):
             print(f'{i+1}. getting user {id}\'s {len(friends)} friends.')
             users_friends[str(id)] = friends
 
-            # Loads old file to continue where it left off and saves it back.
-            out_file = in_file + '_friends.json'
-            export_path = f'{folder_path}\\{out_file}'
+            # Loads batch file to continue where it left off and saves it back.
             try:
-                with open(export_path) as f:
+                with open(batch_path) as f:
                     users_friends = dict(
                         list(dict(json.load(f)).items()) + list(users_friends.items()))
-                    print('users in file: ', len(users_friends))
+                    print('users in batch file: ', len(users_friends))
             except FileNotFoundError:
-                with open(export_path, 'w') as f:
-                    print('users in file: ', len(users_friends))
-            with open(export_path, 'w') as outfile:
+                with open(batch_path, 'w') as f:
+                    print('users in batch file: ', len(users_friends))
+            with open(batch_path, 'w') as outfile:
                 json.dump(users_friends, outfile)
 
         # Continue if not authorized to scrape user.
@@ -74,8 +77,17 @@ for i in range(batches):
             print('continuing...')
             continue
 
-    # Create batch backup.
-    shutil.copyfile(
-        export_path, f'{folder_path}\\{in_file}' + '_friends.batch')
+    # Merge batch with main file:
+    try:
+        with open(main_path) as f1, open(batch_path) as f2:
+            users_friends = dict(
+                list(dict(json.load(f1)).items()) + list(dict(json.load(f2)).items()))
+            print('users in main file: ', len(users_friends))
+    except FileNotFoundError:
+        with open(batch_path) as f:
+            users_friends = json.load(f)
+            print('users in main file: ', len(users_friends))
+    with open(main_path, 'w') as outfile:
+        json.dump(users_friends, outfile)
 
 print('all done.')
