@@ -116,4 +116,5 @@ dmypy.json
 
 # Custom exceptions
 00_test.py
+00_test.ipynb
 keys.json

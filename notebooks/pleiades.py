@@ -103,7 +103,7 @@ class CZ:
 
     def remove_punctuation(self, sentence, sep=' '):
         import string
-        translator = str.maketrans(string.punctuation, 'sep'*len(string.punctuation))
+        translator = str.maketrans(string.punctuation, sep*len(string.punctuation))
         return sentence.translate(translator)
 
     def split_camel_case(self, sentence):
