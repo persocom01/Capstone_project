@@ -22,8 +22,6 @@ auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 # wait_on_rate_limit=True avoids error 429 for hitting twitter api limits.
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
-# u = api.get_user(783214)
-
 # Get tweet twitter search. Twitter api tweet limit should be 2500 per 15 min.
 # API.search(q[, geocode][, lang][, locale][, result_type][, count][, until]
 # [, since_id][, max_id][, include_entities])

@@ -8,12 +8,12 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 # save_folder = 'data'
 # filename = '#cancelnetflix'
 
-import_path = r'.\data\#michellewilliams_users.csv'
+import_path = r'.\data\@gkcdaily.csv'
 data = pd.read_csv(import_path, low_memory=False)
 # print(data.shape)
 # print(data.columns)
 # print(data.iloc[20])
-print(data['user.description'][1])
+print(data['id_str'][152])
 
 # import_path = r'.\data\#cancelnetflix.json'
 # with open(import_path, 'r') as f:
