@@ -59,11 +59,17 @@ class CZ:
         # Contractions dict.
         self.contractions = {
             "n't": " not",
+            "n’t": " not",
             "'s": " is",
+            "’s": " is",
             "'m": " am",
+            "’m": " am",
             "'ll": " will",
+            "’ll": " will",
             "'ve": " have",
-            "'re": " are"
+            "’ve": " have",
+            "'re": " are",
+            "’re": " are"
         }
         self.re_ref = {
             'email': r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)',
@@ -103,8 +109,12 @@ class CZ:
 
     def remove_punctuation(self, sentence, sep=' '):
         import string
+        import re
         translator = str.maketrans(string.punctuation, sep*len(string.punctuation))
-        return sentence.translate(translator)
+        sentence = sentence.translate(translator)
+        # Remove pesky non standard character punctuations.
+        sentence = re.sub(r'[’“”]', sep, sentence)
+        return sentence
 
     def split_camel_case(self, sentence):
         import re
@@ -147,7 +157,7 @@ class CZ:
                     text_list[i] = re.sub(arg, sep, text_list[i])
         return text_list
 
-    def word_cloud(self, text, figsize=(12.5, 7.5), max_font_size=None, max_words=200, background_color='black', mask=None, recolor=False, **kwargs):
+    def word_cloud(self, text, figsize=(12.5, 7.5), max_font_size=None, max_words=200, background_color='black', mask=None, recolor=False, export_path=None, **kwargs):
         '''
         Plots a wordcloud.
 
@@ -175,6 +185,8 @@ class CZ:
                           interpolation='bilinear')
             else:
                 ax.imshow(cloud, interpolation='bilinear')
+        if export_path:
+            cloud.to_file(export_path)
         ax.axis('off')
         plt.show()
         plt.close()
