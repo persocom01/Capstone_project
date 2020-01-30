@@ -76,6 +76,7 @@ class CZ:
             'links': r'(https?://[^ ]+)',
             'gender_pronouns': ['[hH]e/[hH]im', '[tT]hey/[tT]hem', '[tT]ey/[tT]em', '[eE]y/[eE]m', '[eE]/[eE]m', '[tT]hon/[tT]hon', '[fF]ae/[fF]aer', '[vV]ae/[vV]aer', '[aA]e/[aA]er', '[nN]e/[nN]ym', '[nN]e/[nN]em', '[xX]e/[xX]em', '[xX]e/[xX]im', '[xX]ie/[xX]em', '[zZ]e/[zZ]ir', '[zZ]ie/[zZ]ir', '[zZ]he/[zZ]hir', '[zZ]e/[hH]ir', '[sS]ie/[sS]ier', '[zZ]ed/[zZ]ed', '[zZ]ed/[zZ]ed', '[cC]e/[cC]ir', '[cC]o/[cC]os', '[vV]e/[vV]is', '[jJ]ee/[jJ]em', '[lL]ee/[lL]im', '[kK]ye/[kK]yr', '[pP]er/[pP]er', '[hH]u/[hH]um', '[bB]un/[bB]un', '[iI]t/[iI]t']
         }
+        self.sep = ' '
 
     # Lowercase.
     def to_lower(self, sentence):
@@ -107,13 +108,11 @@ class CZ:
         # Returns sentence instead of individual words.
         return ' '.join(words)
 
-    def remove_punctuation(self, sentence, sep=' '):
-        import string
+    def remove_punctuation(self, sentence, sep=None):
         import re
-        translator = str.maketrans(string.punctuation, sep*len(string.punctuation))
-        sentence = sentence.translate(translator)
-        # Remove pesky non standard character punctuations.
-        sentence = re.sub(r'[’“”]', sep, sentence)
+        if sep is None:
+            sep = self.sep
+        sentence = re.sub(r'[!"#$%&\'()*+, -./:; <= >?@[\]^_`{|}~’“”]', sep, sentence)
         return sentence
 
     def split_camel_case(self, sentence):
@@ -121,13 +120,15 @@ class CZ:
         splitted = re.sub('([A-Z][a-z]+)', r' \1', re.sub('([A-Z]+)', r' \1', sentence)).split()
         return ' '.join(splitted)
 
-    def text_list_cleaner(self, text_list, *args, sep=' ', inplace=False):
+    def text_list_cleaner(self, text_list, *args, sep=None, inplace=False):
         '''
         Cleans text in lists.
         '''
         import re
         if inplace is False:
             text_list = text_list.copy()
+        if sep is None:
+            sep = self.sep
 
         # Prevents KeyError from passing a pandas series with index not
         # beginning in 0.

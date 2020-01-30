@@ -5,7 +5,6 @@ from time import sleep
 import json
 import datetime
 import os
-import pickle
 
 # Search variables.
 all_words = ''
@@ -21,7 +20,7 @@ start = datetime.datetime(2019, 12, 11)  # yyyy, m, d
 end = datetime.datetime(2019, 12, 31)  # yyyy, m, d
 retweets = True
 
-# only edit these if you're having problems
+# Only edit these if you're having problems.
 delay = 2  # time to wait on each page load before reading the page
 chrome_options = webdriver.chrome.options.Options()
 chrome_options.add_argument('--user-data-dir=chrome-data')

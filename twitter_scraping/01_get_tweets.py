@@ -40,38 +40,3 @@ with open(export_path, 'w') as f:
 df = pd.io.json.json_normalize(tweets)  # Flattens the json file.
 export_path = folder_path + '\\' + search_term + '.csv'
 df.to_csv(export_path, index=None)
-
-# tweet_attribs = ['id_str', 'text']
-# user_attribs = ['id_str', 'name', 'screen_name', 'description', 'friends_count']
-
-# tweet_dict = {}
-# for tweet in tweets:
-#     tweet_json = jsonify_tweepy(tweet)
-#     print(tweet_json)
-#     for attrib in tweet_attribs:
-#         if attrib in tweet_dict:
-#             tweet_dict[attrib].append(tweet_json[attrib])
-#         else:
-#             tweet_dict[attrib] = [tweet_json[attrib]]
-#     for attrib in user_attribs:
-#         prefixed_attrib = 'user_' + attrib
-#         if prefixed_attrib in tweet_dict:
-#             tweet_dict[prefixed_attrib].append(tweet_json['user'][attrib])
-#         else:
-#             tweet_dict[prefixed_attrib] = [tweet_json['user'][attrib]]
-
-# df = pd.DataFrame(tweet_dict)
-# print(df)
-#
-# export_path = r'.\data\tweets.xlsx'
-# df.to_excel(export_path)
-
-
-# print(public_tweets[0].user)
-# print(dict['name'])
-# needed features: id,
-
-
-# for tweet in public_tweets:
-#     print(tweet.user)
-# print(tweet.user.name + ': ' + tweet.text)
