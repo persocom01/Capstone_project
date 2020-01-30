@@ -62,12 +62,11 @@ for i in range(batches):
                 with open(batch_path) as f:
                     users_friends = dict(
                         list(dict(json.load(f)).items()) + list(users_friends.items()))
-                    print('users in batch file: ', len(users_friends))
             except FileNotFoundError:
-                with open(batch_path, 'w') as f:
-                    print('users in batch file: ', len(users_friends))
+                pass
             with open(batch_path, 'w') as outfile:
                 json.dump(users_friends, outfile)
+            print('users in batch file: ', len(users_friends))
 
         # Continue if not authorized to scrape user.
         except tweepy.error.TweepError as err:
