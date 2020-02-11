@@ -30,7 +30,7 @@ I got data from the main dataset using the official API, however, the data for t
 
 The dataset is comprises carefully chosen topics which I believed would make it easy to segment users' political leanings based on their response to the topic; a kind of political litmus test. Or in other words, politically polarizing topics were chosen.
 
-With the dataset in hand, I would manually label tweets as liberal or conservative based on the user's response to the topic. Once this was done, I would extract from the tweets a list of unique users with their political leanings already labeled. From these users, I would extract their user name and description, run them though multiple transformations to clean them, then use them to train a machine learning model to predict if a user is conservative or liberal.
+With the dataset in hand, I would manually label tweets as liberal or conservative based on the user's response to the topic. Once this was done, I would extract from the tweets a list of unique users. From these users, I would extract their user name and description, run them though multiple transformations to clean them, then use them to train a machine learning model to predict if a user is conservative or liberal.
 
 After the model is trained, it will be tested on a validation dataset to evaluate its effectiveness.
 
