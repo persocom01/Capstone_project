@@ -83,6 +83,8 @@ Validation set results:
 
 ### Key findings
 
+![model coefficients](./images/model%20coefficients.jpg)
+
 1. Conservatives tend to be Trump voters, religious, patriotic, and married.
 2. Liberals tend to be anti-Trump, narcissistic, of minority races, and support LGBT.
 3. The precision of the models in predicting conservatives tends to fall sharply when applied to areas outside the USA.
