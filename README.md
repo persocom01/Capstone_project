@@ -1,5 +1,7 @@
 # Segmentation of Twitter Users with Machine Learning
 
+Presentation slides [here](presentation.pdf)
+
 ## Business context
 
 Twitter is readily available, rich source of OSINT (open-source intelligence) data that is often cited by news media organizations as being representative of the voice of the common man.
@@ -7,6 +9,9 @@ Twitter is readily available, rich source of OSINT (open-source intelligence) da
 But is it really? According to Pew Research Center, of the 22% of adults in the USA who use twitter, the vast majority of tweets come from just 10% of users. In other words, twitter serves as a platform that amplifies the voice of a mere 2.2% of the US population.
 
 Of these 2.2% of users, only 16% approve of Trump, a figure which is at odds with his national approval rating of 43% (29 Jan 2020, fivethirtyeight.com)
+
+![twitter user distribution](./images/twitter user distribution.jpg)
+
 This lack of balance presents a challenge to companies seeking to use twitter as a source of customer feedback.
 
 ## Business objective
