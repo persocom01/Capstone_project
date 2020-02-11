@@ -10,7 +10,7 @@ But is it really? According to Pew Research Center, of the 22% of adults in the 
 
 Of these 2.2% of users, only 16% approve of Trump, a figure which is at odds with his national approval rating of 43% (29 Jan 2020, fivethirtyeight.com)
 
-![twitter user distribution](images/twitter user distribution.jpg)
+![twitter user distribution](./images/jk.png)
 
 This lack of balance presents a challenge to companies seeking to use twitter as a source of customer feedback.
 
