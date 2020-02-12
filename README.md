@@ -8,7 +8,7 @@ Twitter is readily available, rich source of OSINT (open-source intelligence) da
 
 But is it really? According to Pew Research Center, of the 22% of adults in the USA who use twitter, the vast majority of tweets come from just 10% of users. In other words, twitter serves as a platform that amplifies the voice of a mere 2.2% of the US population.
 
-Of these 2.2% of users, only 16% approve of Trump, a figure which is at odds with his national approval rating of 43% (29 Jan 2020, fivethirtyeight.com)
+Of these 2.2% of the population, only 16% approve of Trump, a figure which is at odds with his national approval rating of 43% (29 Jan 2020, fivethirtyeight.com)
 
 ![twitter user distribution](./images/twitter%20user%20distribution.jpg)
 
@@ -26,7 +26,7 @@ Once users are divided, we will examine and evaluate the findings of our machine
 
 Twitter data is readily available from twitter's official API. However, the API comes with many restrictions, such as how far back you can search for tweets (7 days) and how many requests of each type you may make every 15 min.
 
-I got data from the main dataset using the official API, however, the data for the validation dataset was acquired by first scraping twitter by using selenium to scrape for tweet ids before using twitter API to retrieve the full tweet.
+I got data from the main dataset using the official API, however, the data for the validation dataset was acquired by first scraping twitter using selenium for tweet ids before using twitter API to retrieve the full tweet.
 
 The dataset is comprises carefully chosen topics which I believed would make it easy to segment users' political leanings based on their response to the topic; a kind of political litmus test. Or in other words, politically polarizing topics were chosen.
 
