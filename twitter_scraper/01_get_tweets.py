@@ -37,6 +37,6 @@ with open(export_path, 'w') as f:
     json.dump(tweets, f)
 
 # Create excel readable csv file.
-df = pd.io.json.json_normalize(tweets)  # Flattens the json file.
+df = pd.json_normalize(tweets)  # Flattens the json file.
 export_path = folder_path + '\\' + search_term + '.csv'
 df.to_csv(export_path, index=None)
